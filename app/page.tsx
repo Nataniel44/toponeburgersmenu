@@ -29,15 +29,31 @@ function HomeContent() {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto space-y-6">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 font-medium text-sm tracking-wide uppercase animate-fade-in">
-            Hamburguesas Artesanales Premium
-          </span>
-          <h1 className="text-4xl sm:text-6xl font-bold text-zinc-900 dark:text-white leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            Siente la <span className="text-orange-500">Diferencia</span> en Cada Bocado.
-          </h1>
+      <section className="relative pt-48 pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background Video Layer */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="ddd.mp4" type="video/mp4" />
+          </video>
+          {/* Smooth Overlay for Readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-50/80 via-zinc-50/40 to-zinc-50 dark:from-black/80 dark:via-black/40 dark:to-black backdrop-blur-[2px]"></div>
+        </div>
 
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto space-y-6">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 font-medium text-sm tracking-wide uppercase animate-fade-in">
+              Hamburguesas Artesanales Premium
+            </span>
+            <h1 className="text-4xl sm:text-6xl font-bold text-zinc-900 dark:text-white leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              Siente la <span className="text-orange-500">Diferencia</span> en Cada Bocado.
+            </h1>
+          </div>
         </div>
       </section>
 
@@ -46,7 +62,7 @@ function HomeContent() {
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Nuestra Selección</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {burgers.map((burger, index) => (
             <div
               key={burger.id}
