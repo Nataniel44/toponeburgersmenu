@@ -49,5 +49,15 @@ export const burgers: Burger[] = [
         price: 9000,
         image: "/s.png",
         calories: 1500
+    },
+    {
+        id: "5",
+        name: "Mini Burgers",
+        shortDescription: "6 mini burgers",
+        fullDescription: "6 mini burgers con papas fritas",
+        ingredients: ["6x Hamburguesas", "Papas Fritas", "Queso cheddar", "Beacon"],
+        price: 10000,
+        image: "/mini.png",
+        calories: 1500
     }
 ];

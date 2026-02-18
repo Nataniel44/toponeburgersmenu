@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useCart } from "./CartContext";
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,7 @@ import Image from "next/image";
 
 export default function CartSummary() {
     const { cart, totalItems, totalPrice, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart } = useCart();
+    const [deliveryMethod, setDeliveryMethod] = useState<'delivery' | 'pickup'>('delivery');
 
     if (totalItems === 0) return null;
 
@@ -127,18 +129,47 @@ export default function CartSummary() {
 
                     {/* Footer */}
                     <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm rounded-b-3xl sm:rounded-b-2xl">
+
+                        {/* Delivery Method Selection */}
+                        <div className="flex gap-2 mb-6 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
+                            <button
+                                onClick={() => setDeliveryMethod('delivery')}
+                                className={cn(
+                                    "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200",
+                                    deliveryMethod === 'delivery'
+                                        ? "bg-white dark:bg-zinc-700 text-orange-600 dark:text-orange-400 shadow-sm"
+                                        : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+                                )}
+                            >
+                                Delivery
+                            </button>
+                            <button
+                                onClick={() => setDeliveryMethod('pickup')}
+                                className={cn(
+                                    "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200",
+                                    deliveryMethod === 'pickup'
+                                        ? "bg-white dark:bg-zinc-700 text-orange-600 dark:text-orange-400 shadow-sm"
+                                        : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+                                )}
+                            >
+                                Retiro
+                            </button>
+                        </div>
+
                         <div className="space-y-3 mb-6">
                             <div className="flex justify-between text-zinc-500 dark:text-zinc-400">
                                 <span>Subtotal</span>
                                 <span>${totalPrice.toLocaleString('es-AR')}</span>
                             </div>
                             <div className="flex justify-between text-zinc-500 dark:text-zinc-400">
-                                <span>Envío</span>
-                                <span>$2.000</span>
+                                <span>{deliveryMethod === 'delivery' ? 'Envío' : 'Retiro'}</span>
+                                <span className="text-orange-500 font-medium">
+                                    {deliveryMethod === 'delivery' ? 'A coordinar' : 'Gratis'}
+                                </span>
                             </div>
                             <div className="flex justify-between text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-3 border-t border-zinc-200 dark:border-zinc-700">
                                 <span>Total</span>
-                                <span>${(totalPrice + 2000).toLocaleString('es-AR')}</span>
+                                <span>${totalPrice.toLocaleString('es-AR')}</span>
                             </div>
                         </div>
 
@@ -146,10 +177,11 @@ export default function CartSummary() {
                             onClick={() => {
                                 const phoneNumber = "543755246464"; // Formato internacional para Argentina
                                 const orderDetails = cart.map(item => `- ${item.quantity}x ${item.name} ($${(item.price * item.quantity).toLocaleString('es-AR')})`).join('%0A');
-                                const total = (totalPrice + 2000).toLocaleString('es-AR');
-                                const message = `¡Hola Top One Burgers! Quisiera realizar el siguiente pedido:%0A%0A${orderDetails}%0A%0A*Total con envío: $${total}*%0A%0A¡Muchas gracias!`;
+                                const total = totalPrice.toLocaleString('es-AR');
+                                const method = deliveryMethod === 'delivery' ? 'Envío a Domicilio (Costo a coordinar)' : 'Retiro en Local';
+                                const message = `¡Hola Top One Burgers! Quisiera realizar el siguiente pedido:%0A%0A${orderDetails}%0A%0A*Método de entrega:* ${method}%0A*Total estimada (sin envío): $${total}*%0A%0A¡Muchas gracias!`;
 
-                                alert("¡Pedido enviado! Te estamos redirigiendo a WhatsApp para completar el pedido.");
+                                alert("¡Pedido preparado! Te estamos redirigiendo a WhatsApp para enviarlo.");
                                 window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
                             }}
                             className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 py-4 rounded-xl font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-zinc-900/10 dark:shadow-white/10 uppercase tracking-wide"
