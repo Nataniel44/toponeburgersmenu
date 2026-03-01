@@ -39,7 +39,7 @@ function HomeContent() {
             playsInline
             className="w-full h-full object-cover"
           >
-            <source src="ddd.mp4" type="video/mp4" />
+            <source src="fondo.mp4" type="video/mp4" />
           </video>
           {/* Smooth Overlay for Readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-zinc-50/80 via-zinc-50/40 to-zinc-50 dark:from-black/80 dark:via-black/40 dark:to-black backdrop-blur-[2px]"></div>
@@ -47,12 +47,21 @@ function HomeContent() {
 
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto space-y-6">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 font-medium text-sm tracking-wide uppercase animate-fade-in">
-              Hamburguesas Artesanales Premium
+            <span className="inline-block px-5 py-2 rounded-full bg-orange-100/80 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 font-bold text-xs sm:text-sm tracking-[0.2em] uppercase animate-fade-in border border-orange-500/20 backdrop-blur-md shadow-sm">
+              Top One Burgers • San Vicente
             </span>
-            <h1 className="text-4xl sm:text-6xl font-bold text-zinc-900 dark:text-white leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
-              Siente la <span className="text-orange-500">Diferencia</span> en Cada Bocado.
+            <h1 className="text-5xl sm:text-7xl font-black text-zinc-900 dark:text-white leading-[1.1] animate-slide-up tracking-tight" style={{ animationDelay: '0.1s' }}>
+              El Sabor Que <br className="hidden sm:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 drop-shadow-sm">Revoluciona</span> Tu Paladar
             </h1>
+            <p className="text-lg sm:text-xl text-zinc-700 dark:text-zinc-300 max-w-2xl mx-auto animate-slide-up font-medium leading-relaxed" style={{ animationDelay: '0.2s' }}>
+              Medallones 100% premium, pan de papa horneado en el día y combinaciones únicas. Descubre la verdadera experiencia artesanal.
+            </p>
+            <div className="pt-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+              <a href="#menu-selection" className="inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-full font-bold text-lg shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 transition-all duration-300 hover:-translate-y-1 active:scale-95">
+                Ver Nuestro Menú
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -61,6 +70,8 @@ function HomeContent() {
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Nuestra Selección</h2>
         </div>
+
+
 
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {burgers.map((burger, index) => (

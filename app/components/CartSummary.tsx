@@ -75,7 +75,7 @@ export default function CartSummary() {
                     {/* Items List */}
                     <div className="max-h-[50vh] overflow-y-auto p-6 space-y-6 no-scrollbar">
                         {cart.map((item) => (
-                            <div key={item.id} className="flex gap-4 group">
+                            <div key={item.cartItemId} className="flex gap-4 group">
                                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
                                     <Image
                                         src={item.image}
@@ -90,17 +90,19 @@ export default function CartSummary() {
                                             {item.name}
                                         </h4>
                                         <span className="font-bold text-zinc-900 dark:text-zinc-50">
-                                            ${(item.price * item.quantity).toLocaleString('es-AR')}
+                                            ${((item.price + (item.flavorsExtraPrice || 0)) * item.quantity).toLocaleString('es-AR')}
                                         </span>
                                     </div>
-                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">
-                                        {item.ingredients.slice(0, 3).join(", ")}...
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+                                        {item.selectedFlavors
+                                            ? item.selectedFlavors.map(f => f.name).join(", ")
+                                            : item.ingredients.slice(0, 3).join(", ") + "..."}
                                     </p>
 
                                     <div className="flex items-center justify-between mt-2">
                                         <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-1">
                                             <button
-                                                onClick={() => updateQuantity(item.id, -1)}
+                                                onClick={() => updateQuantity(item.cartItemId, -1)}
                                                 className="w-6 h-6 flex items-center justify-center rounded-md bg-white dark:bg-zinc-700 shadow-sm hover:scale-105 active:scale-95 transition-transform"
                                             >
                                                 <Minus size={12} />
@@ -109,14 +111,14 @@ export default function CartSummary() {
                                                 {item.quantity}
                                             </span>
                                             <button
-                                                onClick={() => updateQuantity(item.id, 1)}
+                                                onClick={() => updateQuantity(item.cartItemId, 1)}
                                                 className="w-6 h-6 flex items-center justify-center rounded-md bg-white dark:bg-zinc-700 shadow-sm hover:scale-105 active:scale-95 transition-transform"
                                             >
                                                 <Plus size={12} />
                                             </button>
                                         </div>
                                         <button
-                                            onClick={() => removeFromCart(item.id)}
+                                            onClick={() => removeFromCart(item.cartItemId)}
                                             className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
                                         >
                                             <Trash2 size={18} />
@@ -176,7 +178,13 @@ export default function CartSummary() {
                         <button
                             onClick={() => {
                                 const phoneNumber = "543755246464"; // Formato internacional para Argentina
-                                const orderDetails = cart.map(item => `- ${item.quantity}x ${item.name} ($${(item.price * item.quantity).toLocaleString('es-AR')})`).join('%0A');
+                                const orderDetails = cart.map(item => {
+                                    let name = item.name;
+                                    if (item.selectedFlavors) {
+                                        name += ` (${item.selectedFlavors.map(f => f.name).join(', ')})`;
+                                    }
+                                    return `- ${item.quantity}x ${name} ($${((item.price + (item.flavorsExtraPrice || 0)) * item.quantity).toLocaleString('es-AR')})`;
+                                }).join('%0A');
                                 const total = totalPrice.toLocaleString('es-AR');
                                 const method = deliveryMethod === 'delivery' ? 'Envío a Domicilio (Costo a coordinar)' : 'Retiro en Local';
                                 const message = `¡Hola Top One Burgers! Quisiera realizar el siguiente pedido:%0A%0A${orderDetails}%0A%0A*Método de entrega:* ${method}%0A*Total estimada (sin envío): $${total}*%0A%0A¡Muchas gracias!`;

@@ -4,14 +4,17 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Burger } from '@/app/data';
 
 interface CartItem extends Burger {
+    cartItemId: string;
     quantity: number;
+    selectedFlavors?: Burger[];
+    flavorsExtraPrice?: number;
 }
 
 interface CartContextType {
     cart: CartItem[];
-    addToCart: (burger: Burger, quantity: number) => void;
-    removeFromCart: (burgerId: string) => void;
-    updateQuantity: (burgerId: string, delta: number) => void;
+    addToCart: (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => void;
+    removeFromCart: (cartItemId: string) => void;
+    updateQuantity: (cartItemId: string, delta: number) => void;
     isCartOpen: boolean;
     setIsCartOpen: (isOpen: boolean) => void;
     totalItems: number;
@@ -24,27 +27,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
 
-    const addToCart = (burger: Burger, quantity: number) => {
+    const addToCart = (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => {
         setCart(prev => {
-            const existing = prev.find(item => item.id === burger.id);
+            const flavorStr = selectedFlavors ? JSON.stringify(selectedFlavors.map(f => f.id)) : "";
+            const existing = prev.find(item => item.id === burger.id && (item.selectedFlavors ? JSON.stringify(item.selectedFlavors.map(f => f.id)) : "") === flavorStr);
             if (existing) {
                 return prev.map(item =>
-                    item.id === burger.id
+                    item.cartItemId === existing.cartItemId
                         ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
             }
-            return [...prev, { ...burger, quantity }];
+            return [...prev, { ...burger, cartItemId: Math.random().toString(36).substring(7), quantity, selectedFlavors, flavorsExtraPrice }];
         });
     };
 
-    const removeFromCart = (burgerId: string) => {
-        setCart(prev => prev.filter(item => item.id !== burgerId));
+    const removeFromCart = (cartItemId: string) => {
+        setCart(prev => prev.filter(item => item.cartItemId !== cartItemId));
     };
 
-    const updateQuantity = (burgerId: string, delta: number) => {
+    const updateQuantity = (cartItemId: string, delta: number) => {
         setCart(prev => prev.map(item => {
-            if (item.id === burgerId) {
+            if (item.cartItemId === cartItemId) {
                 const newQuantity = Math.max(1, item.quantity + delta);
                 return { ...item, quantity: newQuantity };
             }
@@ -53,7 +57,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-    const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const totalPrice = cart.reduce((acc, item) => acc + ((item.price + (item.flavorsExtraPrice || 0)) * item.quantity), 0);
 
     return (
         <CartContext.Provider value={{

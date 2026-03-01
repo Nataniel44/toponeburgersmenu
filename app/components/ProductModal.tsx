@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from "next/image";
 import { X, Minus, Plus } from "lucide-react";
-import { Burger } from "@/app/data";
+import { Burger, burgers } from "@/app/data";
 import { useCart } from "./CartContext";
 import { cn } from "@/lib/utils";
 
@@ -18,23 +18,45 @@ export default function ProductModal({ isOpen, onClose, burger }: ProductModalPr
     const { addToCart } = useCart();
     const [isAnimating, setIsAnimating] = useState(false);
 
+    // For Minis
+    const isMiniBurgers = burger?.id === "5";
+    const flavorOptions = burgers.filter(b => b.id !== "4" && b.id !== "5");
+    const [flavor1, setFlavor1] = useState<string>("1");
+    const [flavor2, setFlavor2] = useState<string>("1");
+    const [flavor3, setFlavor3] = useState<string>("1");
+
     useEffect(() => {
         if (isOpen) {
             setIsAnimating(true);
             document.body.style.overflow = 'hidden';
             setQuantity(1);
+            setFlavor1("1");
+            setFlavor2("1");
+            setFlavor3("1");
         } else {
             const timer = setTimeout(() => setIsAnimating(false), 300);
             document.body.style.overflow = 'unset';
             return () => clearTimeout(timer);
         }
-    }, [isOpen]);
+    }, [isOpen, isMiniBurgers]);
 
     if (!isOpen && !isAnimating) return null;
     if (!burger) return null;
 
+    const isHulk = (id: string) => id === "6";
+    const extraPricePerHulkPair = 500;
+
+    const f1 = flavorOptions.find(b => b.id === flavor1);
+    const f2 = flavorOptions.find(b => b.id === flavor2);
+    const f3 = flavorOptions.find(b => b.id === flavor3);
+    const selectedFlavors = [f1, f2, f3].filter(Boolean) as Burger[];
+
+    const flavorsExtraPrice = isMiniBurgers
+        ? ([flavor1, flavor2, flavor3].filter(isHulk).length * extraPricePerHulkPair)
+        : 0;
+
     const handleAddToCart = () => {
-        addToCart(burger, quantity);
+        addToCart(burger, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice);
         onClose();
     };
 
@@ -110,6 +132,37 @@ export default function ProductModal({ isOpen, onClose, burger }: ProductModalPr
                         </div>
                     </div>
 
+                    {/* Seleccionador de Sabores para Minis */}
+                    {isMiniBurgers && (
+                        <div className="mb-6 space-y-4">
+                            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
+                                ELIGE LOS 3 SABORES (Vienen de a 2)
+                            </h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                {[1, 2, 3].map((slot) => {
+                                    const value = slot === 1 ? flavor1 : slot === 2 ? flavor2 : flavor3;
+                                    const setValue = slot === 1 ? setFlavor1 : slot === 2 ? setFlavor2 : setFlavor3;
+                                    return (
+                                        <div key={slot} className="flex flex-col gap-1">
+                                            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase">Par {slot}</label>
+                                            <select
+                                                value={value}
+                                                onChange={(e) => setValue(e.target.value)}
+                                                className="w-full bg-zinc-100 dark:bg-zinc-800 border-none rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white font-medium focus:ring-2 focus:ring-orange-500 cursor-pointer"
+                                            >
+                                                {flavorOptions.map(opt => (
+                                                    <option key={opt.id} value={opt.id}>
+                                                        {opt.name} {opt.id === "6" ? "(+ $500)" : ""}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Actions */}
                     <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between gap-4">
                         <div className="flex items-center gap-4 bg-zinc-100 dark:bg-zinc-800 rounded-full p-1.5">
@@ -136,8 +189,8 @@ export default function ProductModal({ isOpen, onClose, burger }: ProductModalPr
                             className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-semibold rounded-full shadow-lg shadow-orange-500/20 transition-all hover:shadow-orange-500/30 active:scale-95 flex items-center justify-center gap-2"
                         >
                             <span>Agregar al pedido</span>
-                            <span className="bg-white/20 px-2 py-0.5 rounded text-sm min-w-[3rem]">
-                                ${(burger.price * quantity).toLocaleString('es-AR')}
+                            <span className="bg-white/20 px-2 py-0.5 rounded text-sm font-bold min-w-[3rem]">
+                                ${((burger.price + flavorsExtraPrice) * quantity).toLocaleString('es-AR')}
                             </span>
                         </button>
                     </div>
