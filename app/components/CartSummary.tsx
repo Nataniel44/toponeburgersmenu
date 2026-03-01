@@ -51,15 +51,15 @@ export default function CartSummary() {
                 {/* Panel Content */}
                 <div
                     className={cn(
-                        "relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-t-3xl sm:rounded-2xl shadow-2xl transition-all duration-500 cubic-bezier(0.32, 0.72, 0, 1)",
+                        "relative w-full max-w-lg max-h-[90vh] flex flex-col bg-white dark:bg-zinc-900 rounded-t-3xl sm:rounded-2xl shadow-2xl transition-all duration-500 cubic-bezier(0.32, 0.72, 0, 1)",
                         isCartOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                     )}
                 >
                     {/* Handle for mobile drag visual */}
-                    <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full sm:hidden" />
+                    <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full sm:hidden shrink-0 z-10" />
 
                     {/* Header */}
-                    <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800">
+                    <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
                         <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
                             <ShoppingBag className="text-orange-500" />
                             Tu Pedido
@@ -73,7 +73,7 @@ export default function CartSummary() {
                     </div>
 
                     {/* Items List */}
-                    <div className="max-h-[50vh] overflow-y-auto p-6 space-y-6 no-scrollbar">
+                    <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar min-h-0">
                         {cart.map((item) => (
                             <div key={item.cartItemId} className="flex gap-4 group">
                                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
@@ -146,7 +146,7 @@ export default function CartSummary() {
                     </div>
 
                     {/* Footer */}
-                    <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm rounded-b-3xl sm:rounded-b-2xl">
+                    <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-sm rounded-b-3xl sm:rounded-b-2xl shrink-0">
 
                         {/* Delivery Method Selection */}
                         <div className="flex gap-2 mb-6 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
