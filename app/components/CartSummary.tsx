@@ -98,6 +98,11 @@ export default function CartSummary() {
                                             ? item.selectedFlavors.map(f => f.name).join(", ")
                                             : item.ingredients.slice(0, 3).join(", ") + "..."}
                                     </p>
+                                    {item.excludedIngredients && item.excludedIngredients.length > 0 && (
+                                        <p className="text-xs text-red-500 dark:text-red-400 font-medium">
+                                            Sin: {item.excludedIngredients.join(", ")}
+                                        </p>
+                                    )}
 
                                     <div className="flex items-center justify-between mt-2">
                                         <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-1">
@@ -194,7 +199,11 @@ export default function CartSummary() {
                                     if (item.selectedFlavors) {
                                         name += ` (${item.selectedFlavors.map(f => f.name).join(', ')})`;
                                     }
-                                    return `- ${item.quantity}x ${name} ($${((item.price + (item.flavorsExtraPrice || 0)) * item.quantity).toLocaleString('es-AR')})`;
+                                    let excludeText = "";
+                                    if (item.excludedIngredients && item.excludedIngredients.length > 0) {
+                                        excludeText = ` [SIN: ${item.excludedIngredients.join(", ")}]`;
+                                    }
+                                    return `- ${item.quantity}x ${name}${excludeText} ($${((item.price + (item.flavorsExtraPrice || 0)) * item.quantity).toLocaleString('es-AR')})`;
                                 }).join('%0A');
                                 const total = totalPrice.toLocaleString('es-AR');
                                 const method = deliveryMethod === 'delivery' ? 'Envío a Domicilio (Costo a coordinar)' : 'Retiro en Local';

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { CartProvider, useCart } from "./components/CartContext";
 import Header from "./components/Header";
@@ -13,6 +13,14 @@ function HomeContent() {
   const [selectedBurger, setSelectedBurger] = useState<Burger | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { setIsCartOpen, editingItem, setEditingItem } = useCart();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      // Force play for iOS devices
+      videoRef.current.play().catch((e) => console.log("Video autoplay failed:", e));
+    }
+  }, []);
 
   const handleSelectBurger = (burger: Burger) => {
     setSelectedBurger(burger);
@@ -34,10 +42,12 @@ function HomeContent() {
         {/* Background Video Layer */}
         <div className="absolute inset-0 z-0">
           <video
+            ref={videoRef}
             autoPlay
             muted
             loop
             playsInline
+            preload="auto"
             className="w-full h-full object-cover"
           >
             <source src="fondo.mp4" type="video/mp4" />

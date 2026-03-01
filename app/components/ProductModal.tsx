@@ -26,6 +26,9 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
     const [flavor2, setFlavor2] = useState<string>("1");
     const [flavor3, setFlavor3] = useState<string>("1");
 
+    // For normal burgers (ingredient toggling)
+    const [excludedIngredients, setExcludedIngredients] = useState<string[]>([]);
+
     useEffect(() => {
         if (isOpen) {
             setIsAnimating(true);
@@ -42,11 +45,13 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
                     setFlavor2("1");
                     setFlavor3("1");
                 }
+                setExcludedIngredients(cartItem.excludedIngredients || []);
             } else {
                 setQuantity(1);
                 setFlavor1("1");
                 setFlavor2("1");
                 setFlavor3("1");
+                setExcludedIngredients([]);
             }
         } else {
             const timer = setTimeout(() => setIsAnimating(false), 300);
@@ -70,14 +75,23 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
         ? ([flavor1, flavor2, flavor3].filter(isHulk).length * extraPricePerHulkPair)
         : 0;
 
+    const toggleIngredient = (ingredient: string) => {
+        setExcludedIngredients(prev =>
+            prev.includes(ingredient)
+                ? prev.filter(i => i !== ingredient)
+                : [...prev, ingredient]
+        );
+    };
+
     const handleAddToCart = () => {
+        const finalExcludedIngredients = excludedIngredients.length > 0 ? excludedIngredients : undefined;
         if (isEditing) {
             const cartItem = burger as CartItem;
-            updateCartItem(cartItem.cartItemId, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice);
+            updateCartItem(cartItem.cartItemId, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice, isMiniBurgers ? undefined : finalExcludedIngredients);
             onClose();
             setTimeout(() => setIsCartOpen(true), 300);
         } else {
-            addToCart(burger, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice);
+            addToCart(burger, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice, isMiniBurgers ? undefined : finalExcludedIngredients);
             onClose();
         }
     };
@@ -140,17 +154,29 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
                     {/* Ingredients */}
                     <div>
                         <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
-                            INGREDIENTES
+                            {isMiniBurgers ? "INGREDIENTES GENERALES" : "INGREDIENTES (Toca para quitar)"}
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                            {burger.ingredients.map((ing) => (
-                                <span
-                                    key={ing}
-                                    className="px-3 py-1 rounded-full text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700"
-                                >
-                                    {ing}
-                                </span>
-                            ))}
+                            {burger.ingredients.map((ing) => {
+                                const isExcluded = excludedIngredients.includes(ing);
+                                return (
+                                    <button
+                                        key={ing}
+                                        type="button"
+                                        disabled={isMiniBurgers}
+                                        onClick={() => toggleIngredient(ing)}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-full text-xs font-semibold transition-all border",
+                                            isExcluded
+                                                ? "bg-red-50 dark:bg-red-950/30 text-red-500 border-red-200 dark:border-red-900/50 line-through opacity-70"
+                                                : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700",
+                                            isMiniBurgers && "cursor-default hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                                        )}
+                                    >
+                                        {ing}
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
 

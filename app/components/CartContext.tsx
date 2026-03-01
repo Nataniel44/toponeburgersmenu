@@ -8,14 +8,15 @@ export interface CartItem extends Burger {
     quantity: number;
     selectedFlavors?: Burger[];
     flavorsExtraPrice?: number;
+    excludedIngredients?: string[];
 }
 
 interface CartContextType {
     cart: CartItem[];
-    addToCart: (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => void;
+    addToCart: (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => void;
     removeFromCart: (cartItemId: string) => void;
     updateQuantity: (cartItemId: string, delta: number) => void;
-    updateCartItem: (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => void;
+    updateCartItem: (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => void;
     isCartOpen: boolean;
     setIsCartOpen: (isOpen: boolean) => void;
     editingItem: CartItem | null;
@@ -31,10 +32,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<CartItem | null>(null);
 
-    const addToCart = (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => {
+    const addToCart = (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => {
         setCart(prev => {
             const flavorStr = selectedFlavors ? JSON.stringify(selectedFlavors.map(f => f.id)) : "";
-            const existing = prev.find(item => item.id === burger.id && (item.selectedFlavors ? JSON.stringify(item.selectedFlavors.map(f => f.id)) : "") === flavorStr);
+            const exIngStr = excludedIngredients ? JSON.stringify(excludedIngredients.slice().sort()) : "";
+            const existing = prev.find(item =>
+                item.id === burger.id &&
+                (item.selectedFlavors ? JSON.stringify(item.selectedFlavors.map(f => f.id)) : "") === flavorStr &&
+                (item.excludedIngredients ? JSON.stringify(item.excludedIngredients.slice().sort()) : "") === exIngStr
+            );
             if (existing) {
                 return prev.map(item =>
                     item.cartItemId === existing.cartItemId
@@ -42,7 +48,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                         : item
                 );
             }
-            return [...prev, { ...burger, cartItemId: Math.random().toString(36).substring(7), quantity, selectedFlavors, flavorsExtraPrice }];
+            return [...prev, { ...burger, cartItemId: Math.random().toString(36).substring(7), quantity, selectedFlavors, flavorsExtraPrice, excludedIngredients }];
         });
     };
 
@@ -60,10 +66,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }));
     };
 
-    const updateCartItem = (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => {
+    const updateCartItem = (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => {
         setCart(prev => prev.map(item => {
             if (item.cartItemId === cartItemId) {
-                return { ...item, quantity, selectedFlavors, flavorsExtraPrice };
+                return { ...item, quantity, selectedFlavors, flavorsExtraPrice, excludedIngredients };
             }
             return item;
         }));
