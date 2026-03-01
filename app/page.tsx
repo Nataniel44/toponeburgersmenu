@@ -12,7 +12,7 @@ import { burgers, Burger } from "./data";
 function HomeContent() {
   const [selectedBurger, setSelectedBurger] = useState<Burger | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { setIsCartOpen } = useCart();
+  const { setIsCartOpen, editingItem, setEditingItem } = useCart();
 
   const handleSelectBurger = (burger: Burger) => {
     setSelectedBurger(burger);
@@ -20,6 +20,7 @@ function HomeContent() {
   };
 
   const handleCloseModal = () => {
+    if (editingItem) setEditingItem(null);
     setIsModalOpen(false);
     setTimeout(() => setSelectedBurger(null), 300); // Clear after animation
   };
@@ -218,9 +219,10 @@ function HomeContent() {
       </footer>
 
       <ProductModal
-        isOpen={isModalOpen}
+        isOpen={isModalOpen || !!editingItem}
         onClose={handleCloseModal}
-        burger={selectedBurger}
+        burger={editingItem ? editingItem : selectedBurger}
+        isEditing={!!editingItem}
       />
 
       <CartSummary />

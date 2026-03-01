@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useCart } from "./CartContext";
-import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 export default function CartSummary() {
-    const { cart, totalItems, totalPrice, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart } = useCart();
+    const { cart, totalItems, totalPrice, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, setEditingItem } = useCart();
     const [deliveryMethod, setDeliveryMethod] = useState<'delivery' | 'pickup'>('delivery');
 
     if (totalItems === 0) return null;
@@ -117,12 +117,23 @@ export default function CartSummary() {
                                                 <Plus size={12} />
                                             </button>
                                         </div>
-                                        <button
-                                            onClick={() => removeFromCart(item.cartItemId)}
-                                            className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
+                                        <div className="flex gap-1">
+                                            <button
+                                                onClick={() => {
+                                                    setEditingItem(item);
+                                                    setIsCartOpen(false); // Hide cart while editing
+                                                }}
+                                                className="p-2 text-zinc-400 hover:text-blue-500 transition-colors"
+                                            >
+                                                <Pencil size={18} />
+                                            </button>
+                                            <button
+                                                onClick={() => removeFromCart(item.cartItemId)}
+                                                className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

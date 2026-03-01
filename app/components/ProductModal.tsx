@@ -4,18 +4,19 @@ import React, { useState, useEffect } from 'react';
 import Image from "next/image";
 import { X, Minus, Plus } from "lucide-react";
 import { Burger, burgers } from "@/app/data";
-import { useCart } from "./CartContext";
+import { useCart, CartItem } from "./CartContext";
 import { cn } from "@/lib/utils";
 
 interface ProductModalProps {
     isOpen: boolean;
     onClose: () => void;
-    burger: Burger | null;
+    burger: Burger | CartItem | null;
+    isEditing?: boolean;
 }
 
-export default function ProductModal({ isOpen, onClose, burger }: ProductModalProps) {
+export default function ProductModal({ isOpen, onClose, burger, isEditing }: ProductModalProps) {
     const [quantity, setQuantity] = useState(1);
-    const { addToCart } = useCart();
+    const { addToCart, updateCartItem, setIsCartOpen } = useCart();
     const [isAnimating, setIsAnimating] = useState(false);
 
     // For Minis
@@ -29,10 +30,24 @@ export default function ProductModal({ isOpen, onClose, burger }: ProductModalPr
         if (isOpen) {
             setIsAnimating(true);
             document.body.style.overflow = 'hidden';
-            setQuantity(1);
-            setFlavor1("1");
-            setFlavor2("1");
-            setFlavor3("1");
+            if (isEditing && burger) {
+                const cartItem = burger as CartItem;
+                setQuantity(cartItem.quantity);
+                if (cartItem.selectedFlavors && cartItem.selectedFlavors.length === 3) {
+                    setFlavor1(cartItem.selectedFlavors[0].id);
+                    setFlavor2(cartItem.selectedFlavors[1].id);
+                    setFlavor3(cartItem.selectedFlavors[2].id);
+                } else {
+                    setFlavor1("1");
+                    setFlavor2("1");
+                    setFlavor3("1");
+                }
+            } else {
+                setQuantity(1);
+                setFlavor1("1");
+                setFlavor2("1");
+                setFlavor3("1");
+            }
         } else {
             const timer = setTimeout(() => setIsAnimating(false), 300);
             document.body.style.overflow = 'unset';
@@ -56,8 +71,15 @@ export default function ProductModal({ isOpen, onClose, burger }: ProductModalPr
         : 0;
 
     const handleAddToCart = () => {
-        addToCart(burger, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice);
-        onClose();
+        if (isEditing) {
+            const cartItem = burger as CartItem;
+            updateCartItem(cartItem.cartItemId, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice);
+            onClose();
+            setTimeout(() => setIsCartOpen(true), 300);
+        } else {
+            addToCart(burger, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice);
+            onClose();
+        }
     };
 
     return (
@@ -188,7 +210,7 @@ export default function ProductModal({ isOpen, onClose, burger }: ProductModalPr
                             onClick={handleAddToCart}
                             className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-semibold rounded-full shadow-lg shadow-orange-500/20 transition-all hover:shadow-orange-500/30 active:scale-95 flex items-center justify-center gap-2"
                         >
-                            <span>Agregar al pedido</span>
+                            <span>{isEditing ? "Actualizar pedido" : "Agregar al pedido"}</span>
                             <span className="bg-white/20 px-2 py-0.5 rounded text-sm font-bold min-w-[3rem]">
                                 ${((burger.price + flavorsExtraPrice) * quantity).toLocaleString('es-AR')}
                             </span>

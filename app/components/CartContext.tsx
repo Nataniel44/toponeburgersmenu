@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Burger } from '@/app/data';
 
-interface CartItem extends Burger {
+export interface CartItem extends Burger {
     cartItemId: string;
     quantity: number;
     selectedFlavors?: Burger[];
@@ -15,8 +15,11 @@ interface CartContextType {
     addToCart: (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => void;
     removeFromCart: (cartItemId: string) => void;
     updateQuantity: (cartItemId: string, delta: number) => void;
+    updateCartItem: (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => void;
     isCartOpen: boolean;
     setIsCartOpen: (isOpen: boolean) => void;
+    editingItem: CartItem | null;
+    setEditingItem: (item: CartItem | null) => void;
     totalItems: number;
     totalPrice: number;
 }
@@ -26,6 +29,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [editingItem, setEditingItem] = useState<CartItem | null>(null);
 
     const addToCart = (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => {
         setCart(prev => {
@@ -56,6 +60,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }));
     };
 
+    const updateCartItem = (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number) => {
+        setCart(prev => prev.map(item => {
+            if (item.cartItemId === cartItemId) {
+                return { ...item, quantity, selectedFlavors, flavorsExtraPrice };
+            }
+            return item;
+        }));
+    };
+
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const totalPrice = cart.reduce((acc, item) => acc + ((item.price + (item.flavorsExtraPrice || 0)) * item.quantity), 0);
 
@@ -65,8 +78,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
             addToCart,
             removeFromCart,
             updateQuantity,
+            updateCartItem,
             isCartOpen,
             setIsCartOpen,
+            editingItem,
+            setEditingItem,
             totalItems,
             totalPrice
         }}>
