@@ -56,8 +56,8 @@ export const burgers: Burger[] = [
         shortDescription: "6 mini burgers a elección",
         fullDescription: "Caja especial con 6 mini burgers. Elige tus 3 sabores favoritos (¡vienen de a pares!) y acompáñalos con papas fritas.",
         ingredients: ["6x Hamburguesas Mini", "Papas Fritas", "dip de salsa de ajo ", "Sabores a elección"],
-        price: 9000,
-        image: "/mini.png",
+        price: 12000,
+        image: "/mi.png",
         calories: 1500
     },
     {
@@ -67,7 +67,7 @@ export const burgers: Burger[] = [
         fullDescription: "Para los más hambrientos. Doble medallón de carne, abundante queso cheddar, cebolla caramelizada y salsa BBQ en pan de papa.",
         ingredients: ["Pan de Papa", "2x Medallones de Carne", "Queso Cheddar", "Cebolla Caramelizada", "Salsa BBQ"],
         price: 9000,
-        image: "/h.png",
+        image: "/hu.png",
         calories: 1200
     }
 ];
