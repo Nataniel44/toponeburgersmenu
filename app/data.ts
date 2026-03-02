@@ -62,6 +62,16 @@ export const burgers: Burger[] = [
     },
     {
         id: "6",
+        name: "Cheese and Bacon",
+        shortDescription: "Pan de papa, medallón, queso cheddar, panceta, cebolla caramelizada.",
+        fullDescription: "Pan de papa, medallón, queso cheddar, panceta, cebolla caramelizada.",
+        ingredients: ["Pan de Papa", "Medallón de Carne", "Queso Cheddar", "Panceta", "Cebolla Caramelizada"],
+        price: 8500,
+        image: "/cb.png",
+        calories: 1200
+    },
+    {
+        id: "7",
         name: "Hulk",
         shortDescription: "Doble carne, cheddar, cebolla caramelizada, salsa BBQ.",
         fullDescription: "Para los más hambrientos. Doble medallón de carne, abundante queso cheddar, cebolla caramelizada y salsa BBQ en pan de papa.",
