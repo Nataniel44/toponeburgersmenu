@@ -38,7 +38,7 @@ function HomeContent() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative pt-48 pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative pt-28 pb-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Background Video Layer */}
         <div className="absolute inset-0 z-0">
           <video
@@ -57,34 +57,34 @@ function HomeContent() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto space-y-6">
-            <span className="inline-block px-5 py-2 rounded-full bg-orange-100/80 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 font-bold text-xs sm:text-sm tracking-[0.2em] uppercase animate-fade-in border border-orange-500/20 backdrop-blur-md shadow-sm">
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-orange-100/80 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 font-bold text-xs tracking-[0.2em] uppercase animate-fade-in border border-orange-500/20 backdrop-blur-md shadow-sm">
               Top One Burgers • San Vicente
             </span>
-            <h1 className="text-5xl sm:text-7xl font-black text-zinc-900 dark:text-white leading-[1.1] animate-slide-up tracking-tight" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-4xl sm:text-6xl font-black text-zinc-900 dark:text-white leading-[1.1] animate-slide-up tracking-tight" style={{ animationDelay: '0.1s' }}>
               El Sabor Que <br className="hidden sm:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 drop-shadow-sm">Revoluciona</span> Tu Paladar
             </h1>
-            <p className="text-lg sm:text-xl text-zinc-700 dark:text-zinc-300 max-w-2xl mx-auto animate-slide-up font-medium leading-relaxed" style={{ animationDelay: '0.2s' }}>
+            <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 max-w-2xl mx-auto animate-slide-up font-medium leading-relaxed" style={{ animationDelay: '0.2s' }}>
               Medallones 100% premium, pan de papa horneado en el día y combinaciones únicas. Descubre la verdadera experiencia artesanal.
             </p>
-            <div className="pt-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-              <a href="#menu-selection" className="inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-full font-bold text-lg shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 transition-all duration-300 hover:-translate-y-1 active:scale-95">
-                Ver Nuestro Menú
+            <div className="pt-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+              <a href="#menu-selection" className="inline-flex items-center justify-center px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full font-bold text-base shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 transition-all duration-300 hover:-translate-y-1 active:scale-95">
+                Ver Menú
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="menu-selection" className="px-4 sm:px-6 lg:px-8 pb-32 max-w-7xl mx-auto scroll-mt-24">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Nuestra Selección</h2>
+      <section id="menu-selection" className="px-4 sm:px-6 lg:px-8 pb-16 max-w-7xl mx-auto scroll-mt-24">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Nuestra Selección</h2>
         </div>
 
 
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {burgers.map((burger, index) => (
             <div
               key={burger.id}
@@ -101,37 +101,37 @@ function HomeContent() {
       </section>
 
       {/* Nosotros Section */}
-      <section id="nosotros" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl">
+      <section id="nosotros" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="relative h-[300px] rounded-3xl overflow-hidden shadow-2xl">
             <Image
               src="/cs.png"
               alt="Cocinando"
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
-              <p className="text-white font-medium italic text-lg line-clamp-2">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+              <p className="text-white font-medium italic text-base line-clamp-2">
                 "Cocinamos cada burger como si fuera para nosotros mismos."
               </p>
             </div>
           </div>
-          <div className="space-y-6">
-            <span className="text-orange-500 font-bold uppercase tracking-widest text-sm">Nuestra Pasión</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 dark:text-white">Hechas a mano, con amor y los mejores ingredientes.</h2>
-            <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <div className="space-y-4">
+            <span className="text-orange-500 font-bold uppercase tracking-widest text-xs">Nuestra Pasión</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white">Hechas a mano, con amor y los mejores ingredientes.</h2>
+            <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
               En Top One Burgers, no solo hacemos comida; creamos experiencias. Todo comenzó en San Vicente, con el sueño de traer la mejor Burger a Misiones.
               <br /><br />
               Utilizamos cortes de carne seleccionados, pan de papa horneado diariamente y vegetales de productores locales. Nuestra meta es simple: que la primera mordida te haga volver siempre.
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-4">
+            <div className="grid grid-cols-2 gap-4 pt-2">
               <div>
-                <h4 className="font-bold text-zinc-900 dark:text-white text-2xl">100%</h4>
-                <p className="text-sm text-zinc-500">Carne Premium</p>
+                <h4 className="font-bold text-zinc-900 dark:text-white text-xl">100%</h4>
+                <p className="text-xs text-zinc-500">Carne Premium</p>
               </div>
               <div>
-                <h4 className="font-bold text-zinc-900 dark:text-white text-2xl">DIARIO</h4>
-                <p className="text-sm text-zinc-500">Pan Horneado</p>
+                <h4 className="font-bold text-zinc-900 dark:text-white text-xl">DIARIO</h4>
+                <p className="text-xs text-zinc-500">Pan Horneado</p>
               </div>
             </div>
           </div>
@@ -139,9 +139,9 @@ function HomeContent() {
       </section>
 
       {/* Local & Horarios Section */}
-      <section id="local" className="py-24 bg-zinc-100 dark:bg-zinc-900/50 scroll-mt-24">
+      <section id="local" className="py-16 bg-zinc-100 dark:bg-zinc-900/50 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-4">Visitanos en San Vicente</h2>
             <p className="text-zinc-600 dark:text-zinc-400">El punto de encuentro para los amantes de las burgers.</p>
           </div>
@@ -175,9 +175,9 @@ function HomeContent() {
       </section>
 
       {/* Footer */}
-      <footer id="contacto" className="bg-white dark:bg-black border-t border-zinc-100 dark:border-zinc-900 pt-20 pb-10 scroll-mt-24">
+      <footer id="contacto" className="bg-white dark:bg-black border-t border-zinc-100 dark:border-zinc-900 pt-12 pb-24 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div className="md:col-span-1 space-y-6">
               <div className="flex items-center gap-2">
                 <div className="px-4 py-1.5 bg-zinc-900 dark:bg-white rounded-xl shadow-xl flex items-center justify-center">

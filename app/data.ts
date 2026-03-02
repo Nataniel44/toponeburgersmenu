@@ -36,7 +36,7 @@ export const burgers: Burger[] = [
         shortDescription: "Cebolla caramelizada, huevo, queso cheddar, tomate, lechuga.",
         fullDescription: "Nuestra especialidad de la casa. Medallón jugoso con el toque dulce de la cebolla caramelizada, huevo, queso cheddar, tomate y lechuga en pan de papa.",
         ingredients: ["Pan de Papa", "Medallón de Carne", "Queso Cheddar", "Cebolla Caramelizada", "Huevo", "Tomate", "Lechuga", "Aderezos"],
-        price: 8000,
+        price: 7500,
         image: "/t.png",
         calories: 950
     },
@@ -56,7 +56,7 @@ export const burgers: Burger[] = [
         shortDescription: "6 mini burgers a elección",
         fullDescription: "Caja especial con 6 mini burgers. Elige tus 3 sabores favoritos (¡vienen de a pares!) y acompáñalos con papas fritas.",
         ingredients: ["6x Hamburguesas Mini", "Papas Fritas", "dip de salsa de ajo ", "Sabores a elección"],
-        price: 12000,
+        price: 11000,
         image: "/mi.png",
         calories: 1500
     },
@@ -66,7 +66,7 @@ export const burgers: Burger[] = [
         shortDescription: "Doble carne, cheddar, cebolla caramelizada, salsa BBQ.",
         fullDescription: "Para los más hambrientos. Doble medallón de carne, abundante queso cheddar, cebolla caramelizada y salsa BBQ en pan de papa.",
         ingredients: ["Pan de Papa", "2x Medallones de Carne", "Queso Cheddar", "Cebolla Caramelizada", "Salsa BBQ"],
-        price: 9000,
+        price: 8500,
         image: "/hu.png",
         calories: 1200
     }
