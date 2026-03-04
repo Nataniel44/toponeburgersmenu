@@ -9,14 +9,16 @@ export interface CartItem extends Burger {
     selectedFlavors?: Burger[];
     flavorsExtraPrice?: number;
     excludedIngredients?: string[];
+    customIngredients?: string[];
+    customMeats?: number;
 }
 
 interface CartContextType {
     cart: CartItem[];
-    addToCart: (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => void;
+    addToCart: (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[], customIngredients?: string[], customMeats?: number) => void;
     removeFromCart: (cartItemId: string) => void;
     updateQuantity: (cartItemId: string, delta: number) => void;
-    updateCartItem: (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => void;
+    updateCartItem: (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[], customIngredients?: string[], customMeats?: number) => void;
     isCartOpen: boolean;
     setIsCartOpen: (isOpen: boolean) => void;
     editingItem: CartItem | null;
@@ -32,14 +34,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<CartItem | null>(null);
 
-    const addToCart = (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => {
+    const addToCart = (burger: Burger, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[], customIngredients?: string[], customMeats?: number) => {
         setCart(prev => {
             const flavorStr = selectedFlavors ? JSON.stringify(selectedFlavors.map(f => f.id)) : "";
             const exIngStr = excludedIngredients ? JSON.stringify(excludedIngredients.slice().sort()) : "";
+            const customIngStr = customIngredients ? JSON.stringify(customIngredients.slice().sort()) : "";
             const existing = prev.find(item =>
                 item.id === burger.id &&
                 (item.selectedFlavors ? JSON.stringify(item.selectedFlavors.map(f => f.id)) : "") === flavorStr &&
-                (item.excludedIngredients ? JSON.stringify(item.excludedIngredients.slice().sort()) : "") === exIngStr
+                (item.excludedIngredients ? JSON.stringify(item.excludedIngredients.slice().sort()) : "") === exIngStr &&
+                (item.customIngredients ? JSON.stringify(item.customIngredients.slice().sort()) : "") === customIngStr &&
+                (item.customMeats || 1) === (customMeats || 1)
             );
             if (existing) {
                 return prev.map(item =>
@@ -48,7 +53,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                         : item
                 );
             }
-            return [...prev, { ...burger, cartItemId: Math.random().toString(36).substring(7), quantity, selectedFlavors, flavorsExtraPrice, excludedIngredients }];
+            return [...prev, { ...burger, cartItemId: Math.random().toString(36).substring(7), quantity, selectedFlavors, flavorsExtraPrice, excludedIngredients, customIngredients, customMeats }];
         });
     };
 
@@ -66,17 +71,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }));
     };
 
-    const updateCartItem = (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[]) => {
+    const updateCartItem = (cartItemId: string, quantity: number, selectedFlavors?: Burger[], flavorsExtraPrice?: number, excludedIngredients?: string[], customIngredients?: string[], customMeats?: number) => {
         setCart(prev => prev.map(item => {
             if (item.cartItemId === cartItemId) {
-                return { ...item, quantity, selectedFlavors, flavorsExtraPrice, excludedIngredients };
+                return { ...item, quantity, selectedFlavors, flavorsExtraPrice, excludedIngredients, customIngredients, customMeats };
             }
             return item;
         }));
     };
 
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-    const totalPrice = cart.reduce((acc, item) => acc + ((item.price + (item.flavorsExtraPrice || 0)) * item.quantity), 0);
+    const totalPrice = cart.reduce((acc, item) => {
+        let price = item.price;
+        if (item.flavorsExtraPrice) price += item.flavorsExtraPrice;
+        if (item.id === "custom" && item.customMeats === 2) price += 1500;
+        return acc + (price * item.quantity);
+    }, 0);
 
     return (
         <CartContext.Provider value={{

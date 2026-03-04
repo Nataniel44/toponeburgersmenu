@@ -94,11 +94,13 @@ export default function CartSummary() {
                                         </span>
                                     </div>
                                     <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
-                                        {item.selectedFlavors
-                                            ? item.selectedFlavors.map(f => f.name).join(", ")
-                                            : item.ingredients.slice(0, 3).join(", ") + "..."}
+                                        {item.id === "custom"
+                                            ? `Pan de papa, ${item.customMeats}x Medallón${item.customIngredients && item.customIngredients.length > 0 ? `, ${item.customIngredients.join(', ')}` : ''}`
+                                            : (item.selectedFlavors
+                                                ? item.selectedFlavors.map(f => f.name).join(", ")
+                                                : item.ingredients.slice(0, 3).join(", ") + "...")}
                                     </p>
-                                    {item.excludedIngredients && item.excludedIngredients.length > 0 && (
+                                    {!item.customIngredients && item.excludedIngredients && item.excludedIngredients.length > 0 && (
                                         <p className="text-xs text-red-500 dark:text-red-400 font-medium">
                                             Sin: {item.excludedIngredients.join(", ")}
                                         </p>
@@ -196,14 +198,24 @@ export default function CartSummary() {
                                 const phoneNumber = "543755246464"; // Formato internacional para Argentina
                                 const orderDetails = cart.map(item => {
                                     let name = item.name;
+                                    let extraText = "";
                                     if (item.selectedFlavors) {
                                         name += ` (${item.selectedFlavors.map(f => f.name).join(', ')})`;
                                     }
+                                    if (item.id === "custom") {
+                                        extraText = ` [${item.customMeats || 1}x Medallón, ${item.customIngredients?.join(', ') || 'Solo pan y carne'}]`;
+                                    }
+
                                     let excludeText = "";
                                     if (item.excludedIngredients && item.excludedIngredients.length > 0) {
                                         excludeText = ` [SIN: ${item.excludedIngredients.join(", ")}]`;
                                     }
-                                    return `- ${item.quantity}x ${name}${excludeText} ($${((item.price + (item.flavorsExtraPrice || 0)) * item.quantity).toLocaleString('es-AR')})`;
+
+                                    let price = item.price;
+                                    if (item.flavorsExtraPrice) price += item.flavorsExtraPrice;
+                                    if (item.id === "custom" && item.customMeats === 2) price += 1500;
+
+                                    return `- ${item.quantity}x ${name}${extraText}${excludeText} ($${(price * item.quantity).toLocaleString('es-AR')})`;
                                 }).join('%0A');
                                 const total = totalPrice.toLocaleString('es-AR');
                                 const method = deliveryMethod === 'delivery' ? 'Envío a Domicilio (Costo a coordinar)' : 'Retiro en Local';

@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useCart } from "./CartContext";
 import { cn } from "@/lib/utils";
 
+import Image from "next/image";
+
 export default function Header() {
     const [theme, setTheme] = useState<"light" | "dark">("light");
     const [scrolled, setScrolled] = useState(false);
@@ -79,16 +81,17 @@ export default function Header() {
                 <div className="container mx-auto px-4 max-w-7xl flex items-center justify-between">
                     {/* Logo Area */}
                     <div
-                        className="flex items-center gap-3 group cursor-pointer"
+                        className="flex items-center group cursor-pointer"
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     >
-                        <div className="relative">
-                            <div className="absolute -inset-1 bg-gradient-to-tr from-orange-600 to-orange-400 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                            <div className="relative px-4 py-1.5 bg-zinc-900 dark:bg-white rounded-xl shadow-xl flex items-center justify-center">
-                                <span className="text-white dark:text-orange-600 font-extrabold text-lg tracking-tight uppercase">
-                                    Top <span className="text-orange-500 dark:text-zinc-900">One</span>
-                                </span>
-                            </div>
+                        <div className="relative w-[50px] h-[50px] sm:w-[50px] sm:h-[50px] -my-4 sm:-my-12 transition-all duration-300">
+                            <Image
+                                src="/log.png"
+                                alt="Top One Burgers"
+                                fill
+                                className="object-contain drop-shadow-xl group-hover:scale-[1.03] transition-transform duration-300"
+                                priority
+                            />
                         </div>
                     </div>
 

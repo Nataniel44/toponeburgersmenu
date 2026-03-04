@@ -29,6 +29,23 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
     // For normal burgers (ingredient toggling)
     const [excludedIngredients, setExcludedIngredients] = useState<string[]>([]);
 
+    // For custom burgers
+    const isCustom = burger?.id === "custom";
+    const [customMeats, setCustomMeats] = useState<number>(1);
+    const [customIngredients, setCustomIngredients] = useState<string[]>([]);
+
+    const availableDressings = ["Mayo", "Ketchup", "Salsa BBQ", "Mostaza", "Salsa de Ajo"];
+    const availableCheeses = ["Queso Cheddar", "Queso Barra"];
+    const availableExtras = ["Tomate", "Lechuga", "Cebolla Caramelizada", "Huevo", "Jamón", "Panceta"];
+
+    const toggleCustomIngredient = (ingredient: string) => {
+        setCustomIngredients(prev =>
+            prev.includes(ingredient)
+                ? prev.filter(i => i !== ingredient)
+                : [...prev, ingredient]
+        );
+    };
+
     useEffect(() => {
         if (isOpen) {
             setIsAnimating(true);
@@ -46,19 +63,23 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
                     setFlavor3("1");
                 }
                 setExcludedIngredients(cartItem.excludedIngredients || []);
+                setCustomIngredients(cartItem.customIngredients || []);
+                setCustomMeats(cartItem.customMeats || 1);
             } else {
                 setQuantity(1);
                 setFlavor1("1");
                 setFlavor2("1");
                 setFlavor3("1");
                 setExcludedIngredients([]);
+                setCustomIngredients([]);
+                setCustomMeats(1);
             }
         } else {
             const timer = setTimeout(() => setIsAnimating(false), 300);
             document.body.style.overflow = 'unset';
             return () => clearTimeout(timer);
         }
-    }, [isOpen, isMiniBurgers]);
+    }, [isOpen, isMiniBurgers, isEditing, burger]);
 
     if (!isOpen && !isAnimating) return null;
     if (!burger) return null;
@@ -73,7 +94,7 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
 
     const flavorsExtraPrice = isMiniBurgers
         ? ([flavor1, flavor2, flavor3].filter(isHulk).length * extraPricePerHulkPair)
-        : 0;
+        : (isCustom && customMeats === 2) ? 1500 : 0;
 
     const toggleIngredient = (ingredient: string) => {
         setExcludedIngredients(prev =>
@@ -85,13 +106,15 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
 
     const handleAddToCart = () => {
         const finalExcludedIngredients = excludedIngredients.length > 0 ? excludedIngredients : undefined;
+        const finalCustomIngredients = customIngredients.length > 0 ? customIngredients : undefined;
+
         if (isEditing) {
             const cartItem = burger as CartItem;
-            updateCartItem(cartItem.cartItemId, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice, isMiniBurgers ? undefined : finalExcludedIngredients);
+            updateCartItem(cartItem.cartItemId, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice, isMiniBurgers || isCustom ? undefined : finalExcludedIngredients, isCustom ? finalCustomIngredients : undefined, isCustom ? customMeats : undefined);
             onClose();
             setTimeout(() => setIsCartOpen(true), 300);
         } else {
-            addToCart(burger, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice, isMiniBurgers ? undefined : finalExcludedIngredients);
+            addToCart(burger, quantity, isMiniBurgers ? selectedFlavors : undefined, flavorsExtraPrice, isMiniBurgers || isCustom ? undefined : finalExcludedIngredients, isCustom ? finalCustomIngredients : undefined, isCustom ? customMeats : undefined);
             onClose();
         }
     };
@@ -129,56 +152,181 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
                     </button>
                 </div>
 
-                {/* Image */}
-                <div className="relative h-64 sm:h-72 w-full shrink-0 overflow-hidden rounded-t-3xl sm:rounded-t-2xl">
-                    <Image
-                        src={burger.image}
-                        alt={burger.name}
-                        fill
-                        className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:hidden" />
-                </div>
+                {/* Header (Image or Custom) */}
+                {!isCustom && (
+                    <div className="relative h-64 sm:h-72 w-full shrink-0 overflow-hidden rounded-t-3xl sm:rounded-t-2xl">
+                        <Image
+                            src={burger.image}
+                            alt={burger.name}
+                            fill
+                            className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:hidden" />
+                    </div>
+                )}
+
+                {isCustom && (
+                    <div className="relative pt-12 pb-8 px-6 sm:px-8 bg-gradient-to-br from-orange-500 to-orange-700 rounded-t-3xl sm:rounded-t-2xl overflow-hidden shadow-inner shrink-0">
+                        <div className="absolute inset-0 bg-black/10"></div>
+                        <div className="relative z-10 flex flex-col justify-end mt-4">
+                            <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-2 drop-shadow-md">
+                                {burger.name}
+                            </h2>
+                            <p className="text-orange-100 font-medium leading-relaxed drop-shadow-sm text-sm">
+                                {burger.fullDescription}
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {/* Content */}
                 <div className="p-6 sm:p-8 space-y-6 max-h-[60vh] overflow-y-auto no-scrollbar">
-                    <div>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
-                            {burger.name}
-                        </h2>
-                        <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                            {burger.fullDescription}
-                        </p>
-                    </div>
-
-                    {/* Ingredients */}
-                    <div>
-                        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
-                            {isMiniBurgers ? "INGREDIENTES GENERALES" : "INGREDIENTES (Toca para quitar)"}
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                            {burger.ingredients.map((ing) => {
-                                const isExcluded = excludedIngredients.includes(ing);
-                                return (
-                                    <button
-                                        key={ing}
-                                        type="button"
-                                        disabled={isMiniBurgers}
-                                        onClick={() => toggleIngredient(ing)}
-                                        className={cn(
-                                            "px-3 py-1.5 rounded-full text-xs font-semibold transition-all border",
-                                            isExcluded
-                                                ? "bg-red-50 dark:bg-red-950/30 text-red-500 border-red-200 dark:border-red-900/50 line-through opacity-70"
-                                                : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700",
-                                            isMiniBurgers && "cursor-default hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                                        )}
-                                    >
-                                        {ing}
-                                    </button>
-                                );
-                            })}
+                    {!isCustom && (
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">
+                                {burger.name}
+                            </h2>
+                            <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                                {burger.fullDescription}
+                            </p>
                         </div>
-                    </div>
+                    )}
+
+                    {/* Normal Ingredients */}
+                    {!isCustom && (
+                        <div>
+                            <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
+                                {isMiniBurgers ? "INGREDIENTES GENERALES" : "INGREDIENTES (Toca para quitar)"}
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                                {burger.ingredients.map((ing) => {
+                                    const isExcluded = excludedIngredients.includes(ing);
+                                    return (
+                                        <button
+                                            key={ing}
+                                            type="button"
+                                            disabled={isMiniBurgers}
+                                            onClick={() => toggleIngredient(ing)}
+                                            className={cn(
+                                                "px-3 py-1.5 rounded-full text-xs font-semibold transition-all border",
+                                                isExcluded
+                                                    ? "bg-red-50 dark:bg-red-950/30 text-red-500 border-red-200 dark:border-red-900/50 line-through opacity-70"
+                                                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700",
+                                                isMiniBurgers && "cursor-default hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                                            )}
+                                        >
+                                            {ing}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Custom Burger Options */}
+                    {isCustom && (
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
+                                    MEDALLONES
+                                </h3>
+                                <div className="flex gap-3">
+                                    {[1, 2].map(num => (
+                                        <button
+                                            key={num}
+                                            onClick={() => setCustomMeats(num)}
+                                            className={cn(
+                                                "flex-1 py-2 rounded-xl text-sm font-semibold transition-all border",
+                                                customMeats === num
+                                                    ? "bg-orange-500 border-orange-500 text-white shadow-md"
+                                                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                                            )}
+                                        >
+                                            {num} Carne{num > 1 ? "s (+$1500)" : ""}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
+                                    ADEREZOS
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {availableDressings.map((ing) => {
+                                        const isSelected = customIngredients.includes(ing);
+                                        return (
+                                            <button
+                                                key={ing}
+                                                type="button"
+                                                onClick={() => toggleCustomIngredient(ing)}
+                                                className={cn(
+                                                    "px-3 py-1.5 rounded-full text-xs font-semibold transition-all border",
+                                                    isSelected
+                                                        ? "bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-500 border-orange-200 dark:border-orange-900/50 shadow-sm"
+                                                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                                                )}
+                                            >
+                                                {ing}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
+                                    QUESOS
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {availableCheeses.map((ing) => {
+                                        const isSelected = customIngredients.includes(ing);
+                                        return (
+                                            <button
+                                                key={ing}
+                                                type="button"
+                                                onClick={() => toggleCustomIngredient(ing)}
+                                                className={cn(
+                                                    "px-3 py-1.5 rounded-full text-xs font-semibold transition-all border",
+                                                    isSelected
+                                                        ? "bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-500 border-orange-200 dark:border-orange-900/50 shadow-sm"
+                                                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                                                )}
+                                            >
+                                                {ing}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 uppercase tracking-wider mb-3">
+                                    EXTRAS
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {availableExtras.map((ing) => {
+                                        const isSelected = customIngredients.includes(ing);
+                                        return (
+                                            <button
+                                                key={ing}
+                                                type="button"
+                                                onClick={() => toggleCustomIngredient(ing)}
+                                                className={cn(
+                                                    "px-3 py-1.5 rounded-full text-xs font-semibold transition-all border",
+                                                    isSelected
+                                                        ? "bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-500 border-orange-200 dark:border-orange-900/50 shadow-sm"
+                                                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                                                )}
+                                            >
+                                                {ing}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Seleccionador de Sabores para Minis */}
                     {isMiniBurgers && (

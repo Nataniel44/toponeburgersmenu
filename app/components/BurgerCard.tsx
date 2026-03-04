@@ -10,6 +10,30 @@ interface BurgerCardProps {
 }
 
 export default function BurgerCard({ burger, onSelect }: BurgerCardProps) {
+    if (burger.id === "custom") {
+        return (
+            <div
+                className="group relative flex flex-col h-full overflow-hidden rounded-2xl bg-gradient-to-br from-orange-500 to-orange-700 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-1 cursor-pointer active:scale-95 active:duration-100 p-6 text-white"
+                onClick={() => onSelect(burger)}
+            >
+                <div className="flex flex-1 flex-col justify-center items-center text-center">
+                    <div className="w-16 h-16 bg-white/20 rounded-full flex justify-center items-center mb-4 backdrop-blur-sm shadow-inner group-hover:scale-110 transition-transform duration-300">
+                        <Plus className="text-white" size={32} strokeWidth={3} />
+                    </div>
+                    <h3 className="text-2xl font-black leading-tight ">
+                        {burger.name}
+                    </h3>
+
+                    <div className="mt-6">
+                        <span className="inline-block px-4 py-2 bg-white/20 rounded-full text-lg font-bold backdrop-blur-sm border border-white/10">
+                            Desde ${burger.price.toLocaleString('es-AR')}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div
             className="group relative flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer active:scale-95 active:duration-100"
@@ -32,7 +56,7 @@ export default function BurgerCard({ burger, onSelect }: BurgerCardProps) {
                         {burger.name}
                     </h3>
                     <span className="flex items-center justify-center shrink-0 w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
-                        <Plus size={16} strokeWidth={2.5} />
+                        <Plus className=" " size={16} strokeWidth={2.5} />
                     </span>
                 </div>
 

@@ -11,6 +11,17 @@ export interface Burger {
 
 export const burgers: Burger[] = [
     {
+        id: "custom",
+        name: "Armá tu Burger",
+        shortDescription: "Pan de papa y medallón obligatorios. ¡Agregá lo que quieras!",
+        fullDescription: "Diseñala a tu medida: pan y carne ya incluidos. Ponéle aderezos, tus quesos preferidos y hasta otro medallón extra.",
+        ingredients: [],
+        price: 4500,
+        image: "/t.png",
+        calories: 900
+    },
+    {
+
         id: "1",
         name: "Cheese",
         shortDescription: "Pan de papa, medallón, queso cheddar, aderezos.",
@@ -79,5 +90,6 @@ export const burgers: Burger[] = [
         price: 8500,
         image: "/hu.png",
         calories: 1200
-    }
+    },
+
 ];
