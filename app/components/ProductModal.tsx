@@ -92,9 +92,11 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
     const f3 = flavorOptions.find(b => b.id === flavor3);
     const selectedFlavors = [f1, f2, f3].filter(Boolean) as Burger[];
 
+    const customIngredientsExtraCost = isCustom ? customIngredients.filter(i => availableCheeses.includes(i) || availableExtras.includes(i)).length * 500 : 0;
+
     const flavorsExtraPrice = isMiniBurgers
         ? ([flavor1, flavor2, flavor3].filter(isHulk).length * extraPricePerHulkPair)
-        : (isCustom && customMeats === 2) ? 1500 : 0;
+        : (isCustom ? ((customMeats === 2 ? 1500 : 0) + customIngredientsExtraCost) : 0);
 
     const toggleIngredient = (ingredient: string) => {
         setExcludedIngredients(prev =>
@@ -293,7 +295,7 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
                                                         : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700"
                                                 )}
                                             >
-                                                {ing}
+                                                {ing} (+$500)
                                             </button>
                                         );
                                     })}
@@ -319,7 +321,7 @@ export default function ProductModal({ isOpen, onClose, burger, isEditing }: Pro
                                                         : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700"
                                                 )}
                                             >
-                                                {ing}
+                                                {ing} (+$500)
                                             </button>
                                         );
                                     })}

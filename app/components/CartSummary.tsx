@@ -213,7 +213,6 @@ export default function CartSummary() {
 
                                     let price = item.price;
                                     if (item.flavorsExtraPrice) price += item.flavorsExtraPrice;
-                                    if (item.id === "custom" && item.customMeats === 2) price += 1500;
 
                                     return `- ${item.quantity}x ${name}${extraText}${excludeText} ($${(price * item.quantity).toLocaleString('es-AR')})`;
                                 }).join('%0A');

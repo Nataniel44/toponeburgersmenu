@@ -16,7 +16,7 @@ export const burgers: Burger[] = [
         shortDescription: "Pan de papa y medallón obligatorios. ¡Agregá lo que quieras!",
         fullDescription: "Diseñala a tu medida: pan y carne ya incluidos. Ponéle aderezos, tus quesos preferidos y hasta otro medallón extra.",
         ingredients: [],
-        price: 4500,
+        price: 5500,
         image: "/t.png",
         calories: 900
     },
