@@ -37,10 +37,18 @@ function HomeContent() {
     <div className="min-h-screen bg-zinc-50 dark:bg-black transition-colors duration-300">
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative pt-28 pb-10 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Background Video Layer */}
-        <div className="absolute inset-0 z-0">
+      {/* Hero Section - App Style */}
+      <section className="pt-24 pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        {/* App Greeting */}
+        <div className="flex items-center justify-between mb-5 animate-slide-up">
+          <div>
+            <h1 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">¡Hola! 👋</h1>
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium mt-0.5">¿Qué vas a pedir hoy?</p>
+          </div>
+        </div>
+
+        {/* Featured Banner Card */}
+        <div className="relative h-48 sm:h-64 w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-orange-500/10 mb-6 group animate-slide-up" style={{ animationDelay: '0.1s' }}>
           <video
             ref={videoRef}
             autoPlay
@@ -48,32 +56,39 @@ function HomeContent() {
             loop
             playsInline
             preload="auto"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           >
             <source src="fondo.mp4" type="video/mp4" />
           </video>
-          {/* Smooth Overlay for Readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-50/80 via-zinc-50/40 to-zinc-50 dark:from-black/80 dark:via-black/40 dark:to-black backdrop-blur-[2px]"></div>
-        </div>
+          {/* Overlay Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
 
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-orange-100/80 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 font-bold text-xs tracking-[0.2em] uppercase animate-fade-in border border-orange-500/20 backdrop-blur-md shadow-sm">
-              Top One Burgers • San Vicente
+          <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-center">
+            <span className="inline-block px-3 py-1 rounded-full bg-orange-500 text-white font-bold text-[10px] sm:text-xs tracking-widest uppercase w-max mb-3 shadow-md border border-orange-400/30">
+              Top One San Vicente
             </span>
-            <h1 className="text-4xl sm:text-6xl font-black text-zinc-900 dark:text-white leading-[1.1] animate-slide-up tracking-tight" style={{ animationDelay: '0.1s' }}>
-              El Sabor Que <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 drop-shadow-sm">Revoluciona</span> Tu Paladar
-            </h1>
-            <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 max-w-2xl mx-auto animate-slide-up font-medium leading-relaxed" style={{ animationDelay: '0.2s' }}>
-              Medallones 100% premium, pan de papa horneado en el día y combinaciones únicas. Descubre la verdadera experiencia artesanal.
-            </p>
-            <div className="pt-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-              <a href="#menu-selection" className="inline-flex items-center justify-center px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full font-bold text-base shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 transition-all duration-300 hover:-translate-y-1 active:scale-95">
+            <h2 className="text-2xl sm:text-4xl font-black text-white leading-[1.15] max-w-[220px] sm:max-w-sm drop-shadow-md">
+              El Sabor Que <span className="text-orange-400">Revoluciona</span> Tu Paladar
+            </h2>
+            <div className="mt-4">
+              <a href="#menu-selection" className="inline-flex items-center justify-center px-5 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white rounded-full font-bold text-sm shadow-xl transition-all duration-300 active:scale-95">
                 Ver Menú
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Categories / Quick Filters */}
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <button className="whitespace-nowrap px-6 py-3 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-sm shadow-lg shadow-zinc-900/10 dark:shadow-white/10 transition-transform active:scale-95 flex items-center gap-2">
+            <span className="text-lg">🍔</span> Burgers
+          </button>
+          <button className="whitespace-nowrap px-6 py-3 rounded-2xl bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 font-bold text-sm shadow-sm border border-zinc-100 dark:border-zinc-800 transition-transform active:scale-95 hover:bg-zinc-50 dark:hover:bg-zinc-800 flex items-center gap-2">
+            <span className="text-lg">🍟</span> Papas <span className="text-[10px] font-medium opacity-60 ml-1">(Pronto)</span>
+          </button>
+          <button className="whitespace-nowrap px-6 py-3 rounded-2xl bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 font-bold text-sm shadow-sm border border-zinc-100 dark:border-zinc-800 transition-transform active:scale-95 hover:bg-zinc-50 dark:hover:bg-zinc-800 flex items-center gap-2">
+            <span className="text-lg">🥤</span> Bebidas <span className="text-[10px] font-medium opacity-60 ml-1">(Pronto)</span>
+          </button>
         </div>
       </section>
 
@@ -100,131 +115,107 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* Nosotros Section */}
-      <section id="nosotros" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="relative h-[300px] rounded-3xl overflow-hidden shadow-2xl">
+      {/* Informacion del Local - App Style */}
+      <section id="info" className="px-4 sm:px-6 lg:px-8 pb-24 max-w-7xl mx-auto scroll-mt-24 space-y-6">
+
+        {/* Story Card (Nosotros) */}
+        <div id="nosotros" className="bg-white dark:bg-zinc-900 rounded-[2rem] overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800">
+          <div className="relative h-48 w-full">
             <Image
               src="/cs.png"
               alt="Cocinando"
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-              <p className="text-white font-medium italic text-base line-clamp-2">
-                "Cocinamos cada burger como si fuera para nosotros mismos."
-              </p>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-5">
+              <h3 className="text-xl font-black text-white leading-tight">Nuestra Pasión</h3>
             </div>
           </div>
-          <div className="space-y-4">
-            <span className="text-orange-500 font-bold uppercase tracking-widest text-xs">Nuestra Pasión</span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white">Hechas a mano, con amor y los mejores ingredientes.</h2>
-            <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              En Top One Burgers, no solo hacemos comida; creamos experiencias. Todo comenzó en San Vicente, con el sueño de traer la mejor Burger a Misiones.
-              <br /><br />
-              Utilizamos cortes de carne seleccionados, pan de papa horneado diariamente y vegetales de productores locales. Nuestra meta es simple: que la primera mordida te haga volver siempre.
+          <div className="p-5 sm:p-6 space-y-4">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+              Hechas a mano, con amor y los mejores ingredientes. En Top One Burgers creamos experiencias. Todo comenzó en San Vicente, con el sueño de traer la mejor Burger a Misiones.
             </p>
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div>
-                <h4 className="font-bold text-zinc-900 dark:text-white text-xl">100%</h4>
-                <p className="text-xs text-zinc-500">Carne Premium</p>
+            <div className="flex items-center gap-4 pt-2">
+              <div className="flex items-center gap-2 bg-orange-50 dark:bg-orange-950/20 px-3 py-1.5 rounded-xl border border-orange-100 dark:border-orange-900/30">
+                <span className="text-orange-600 dark:text-orange-400 font-bold text-xs uppercase">100% Carne</span>
               </div>
-              <div>
-                <h4 className="font-bold text-zinc-900 dark:text-white text-xl">DIARIO</h4>
-                <p className="text-xs text-zinc-500">Pan Horneado</p>
+              <div className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-800/50 px-3 py-1.5 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                <span className="text-zinc-700 dark:text-zinc-300 font-bold text-xs uppercase">Pan Diario</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Store Info Menu (Local & Horarios) */}
+        <div id="local" className="bg-white dark:bg-zinc-900 rounded-[2rem] p-5 sm:p-6 shadow-sm border border-zinc-100 dark:border-zinc-800">
+          <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-4">Información del Local</h3>
+
+          <div className="space-y-1">
+            {/* Ubicacion */}
+            <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+              <div className="w-10 h-10 shrink-0 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-zinc-900 dark:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-sm text-zinc-900 dark:text-white">Local San Vicente</h4>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">San Vicente, Misiones</p>
+              </div>
+            </div>
+
+            <div className="h-px w-[80%] sm:w-[95%] bg-zinc-100 dark:bg-zinc-800 ml-14"></div>
+
+            {/* Horarios */}
+            <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+              <div className="w-10 h-10 shrink-0 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-zinc-900 dark:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-sm text-zinc-900 dark:text-white">Abiertos hoy</h4>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Mar - Dom: 19:30 a 00:00 hs</p>
+              </div>
+              <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md">Abierto</span>
+            </div>
+
+            <div className="h-px w-[80%] sm:w-[95%] bg-zinc-100 dark:bg-zinc-800 ml-14"></div>
+
+            {/* Contacto */}
+            <div className="flex items-center gap-4 p-3 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+              <div className="w-10 h-10 shrink-0 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-500">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-sm text-zinc-900 dark:text-white">WhatsApp</h4>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">+54 9 3755 24-6464</p>
+              </div>
+              <a href="https://wa.me/543755246464" target="_blank" className="text-xs font-bold text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 rounded-full shadow-sm active:scale-95 transition-transform">Chatear</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Local & Horarios Section */}
-      <section id="local" className="py-16 bg-zinc-100 dark:bg-zinc-900/50 scroll-mt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-4">Visitanos en San Vicente</h2>
-            <p className="text-zinc-600 dark:text-zinc-400">El punto de encuentro para los amantes de las burgers.</p>
+      {/* Footer - App Style */}
+      <footer id="contacto" className="bg-white dark:bg-zinc-950 pb-28 pt-8 px-4 border-t border-zinc-100 dark:border-zinc-900 rounded-t-[2rem]">
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center space-y-6">
+          {/* Logo Mini */}
+          <div className="px-5 py-2 bg-zinc-900 dark:bg-white rounded-2xl shadow-md flex items-center justify-center">
+            <span className="text-white dark:text-zinc-900 font-black text-sm tracking-widest uppercase">
+              Top <span className="text-orange-500">One</span>
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-xl shadow-black/5 border border-zinc-200/50 dark:border-zinc-800/50">
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-500 rounded-2xl flex items-center justify-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
-              </div>
-              <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Ubicación</h3>
-              <p className="text-zinc-600 dark:text-zinc-400">San Vicente, Misiones.<br />Consulta por WhatsApp la dirección exacta.</p>
-            </div>
-
-            <div className="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-xl shadow-black/5 border border-zinc-200/50 dark:border-zinc-800/50">
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-500 rounded-2xl flex items-center justify-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-              </div>
-              <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Horarios</h3>
-              <p className="text-zinc-600 dark:text-zinc-400">Mar - Dom: 19:30 a 00:00 hs<br />Lunes: Cerrado</p>
-            </div>
-
-            <div className="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-xl shadow-black/5 border border-zinc-200/50 dark:border-zinc-800/50">
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950/30 text-orange-600 dark:text-orange-500 rounded-2xl flex items-center justify-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
-              </div>
-              <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Contacto</h3>
-              <p className="text-zinc-600 dark:text-zinc-400">Tel: 3755 246464<br />IG: @toponeburgers</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer id="contacto" className="bg-white dark:bg-black border-t border-zinc-100 dark:border-zinc-900 pt-12 pb-24 scroll-mt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <div className="md:col-span-1 space-y-6">
-              <div className="flex items-center gap-2">
-                <div className="px-4 py-1.5 bg-zinc-900 dark:bg-white rounded-xl shadow-xl flex items-center justify-center">
-                  <span className="text-white dark:text-orange-600 font-extrabold text-lg tracking-tight uppercase">
-                    Top <span className="text-orange-500 dark:text-zinc-900">One</span>
-                  </span>
-                </div>
-              </div>
-              <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">
-                Las mejores hamburguesas de San Vicente directas a tu mesa. Calidad premium garantizada.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-zinc-900 dark:text-white mb-6 uppercase text-sm tracking-widest">Navegación</h4>
-              <ul className="space-y-4 text-zinc-500 dark:text-zinc-400 text-sm font-medium">
-                <li><a href="#menu-selection" className="hover:text-orange-500 transition-colors">Menú</a></li>
-                <li><a href="#local" className="hover:text-orange-500 transition-colors">Ubicación</a></li>
-                <li><a href="#nosotros" className="hover:text-orange-500 transition-colors">Sobre Nosotros</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-zinc-900 dark:text-white mb-6 uppercase text-sm tracking-widest">Social</h4>
-              <ul className="space-y-4 text-zinc-500 dark:text-zinc-400 text-sm font-medium">
-                <li><a href="#" className="hover:text-orange-500 transition-colors">Instagram</a></li>
-                <li><a href="#" className="hover:text-orange-500 transition-colors">Facebook</a></li>
-                <li><a href="https://wa.me/543755246464" className="hover:text-orange-500 transition-colors" target="_blank">WhatsApp</a></li>
-              </ul>
-            </div>
-
-            <div className="bg-zinc-100 dark:bg-zinc-900 p-6 rounded-3xl">
-              <h4 className="font-bold text-zinc-900 dark:text-white mb-4 uppercase text-sm tracking-widest text-center md:text-left">¿Antojo?</h4>
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="w-full bg-orange-500 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 active:scale-95"
-              >
-                Pedir Ahora
-              </button>
-            </div>
+          {/* Social Links App Style */}
+          <div className="flex items-center gap-4">
+            <a href="https://www.instagram.com/toponeburgers/" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/50 transition-all active:scale-90">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+            </a>
+            <a href="https://www.facebook.com/toponeburgers/" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-600 dark:text-zinc-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/50 transition-all active:scale-90">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+            </a>
           </div>
 
-          <div className="pt-10 border-t border-zinc-100 dark:border-zinc-900 text-center">
-            <p className="text-zinc-400 dark:text-zinc-600 text-xs">
-              &copy; {new Date().getFullYear()} Top One Burgers. San Vicente, Misiones. Todos los derechos reservados.
-            </p>
-          </div>
+          <p className="text-zinc-400 dark:text-zinc-600 text-[10px] font-medium uppercase tracking-wider text-center max-w-[200px]">
+            &copy; {new Date().getFullYear()} Top One Burgers<br />San Vicente, Misiones
+          </p>
         </div>
       </footer>
 

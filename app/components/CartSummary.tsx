@@ -107,7 +107,7 @@ export default function CartSummary() {
                                     )}
 
                                     <div className="flex items-center justify-between mt-2">
-                                        <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-1">
+                                        <div className="flex items-center gap-3 bg-zinc-100 dark:text-white text-zinc-900 dark:bg-zinc-800 rounded-lg p-1">
                                             <button
                                                 onClick={() => updateQuantity(item.cartItemId, -1)}
                                                 className="w-6 h-6 flex items-center justify-center rounded-md bg-white dark:bg-zinc-700 shadow-sm hover:scale-105 active:scale-95 transition-transform"
